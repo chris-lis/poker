@@ -1,3 +1,5 @@
+import { GameLogger, LogType } from './abstract/game-logger';
+
 export enum CardValue {
   Deuce = 2,
   Three,
@@ -78,8 +80,12 @@ export class Card {
 export class Deck {
   private _deck: Card[];
 
+  get length(): number {
+    return this._deck.length;
+  }
+
   /** Create a shuffled deck of cards */
-  constructor() {
+  constructor(private _logger?: GameLogger) {
     const deck: Card[] = [];
     for (let value = 2; value < 15; value++) {
       for (let suit = 0; suit < 4; suit++) {
@@ -94,14 +100,18 @@ export class Deck {
     }
 
     this._deck = deck;
+    this.log('New deck created!');
   }
 
   /** Deal the top card from the deck. */
   deal(): Card {
     const card = this._deck.pop();
     if (!card) {
-      throw new Error('Trying to deal from an empty deck!');
+      const errorMessage = 'Attempting to deal from an empty deck!';
+      this.log(errorMessage, LogType.GameError);
+      throw new Error(errorMessage);
     }
+    this.log(`${card.toString()} was dealt!`);
     return card;
   }
 
@@ -113,5 +123,9 @@ export class Deck {
           : (str += `\n${card.toString()}`),
       ''
     );
+  }
+
+  private log(message: string, logType?: LogType): void {
+    this._logger?.log('Deck', message, logType);
   }
 }
