@@ -1,6 +1,8 @@
-import { Player, PlayerAction } from './abstract/player';
+import { Player, PlayerAction } from './abstracts/player';
 
-/** A message that contains details of player's action */
+/** A message that contains details of player's action
+ * @throws {RangeError} when the bet size is invalid (depending on the action)
+ */
 export class Bet {
   constructor(
     public player: Player,

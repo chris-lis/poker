@@ -1,6 +1,6 @@
 import { Card, Deck } from './deck';
 
-it('Throws when dealing from an empty deck', () => {
+it('Throws when attepmting to deal from an empty deck', () => {
   const deck = new Deck();
 
   for (let i = 0; i < 52; i++) deck.deal();
@@ -8,7 +8,7 @@ it('Throws when dealing from an empty deck', () => {
   expect(deck.deal).toThrow();
 });
 
-it('Prints the cards in a correct order', () => {
+it('Prints all cards in the correct order', () => {
   const deck = new Deck();
   const deckString = deck.toString();
 
@@ -19,7 +19,7 @@ it('Prints the cards in a correct order', () => {
 
 // Not really a unit test, but a good sanity check for a shuffling algorithm. Slow.
 // it.only('Creates a sufficiently shuffled (random) deck', () => {
-//   const epsilon = 0.001;
+//   const epsilon = 0.001; // 0.1% relative error
 //   const maxIter = 1000000;
 
 //   let counter = 0;

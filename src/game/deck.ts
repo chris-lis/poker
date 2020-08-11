@@ -1,4 +1,5 @@
-import { GameLogger, LogType } from './abstract/game-logger';
+import { GameLogger, GameLogLevel } from './abstracts/game-logger';
+import { GameEntity } from './abstracts/game-entity';
 
 export enum CardValue {
   Deuce = 2,
@@ -77,7 +78,7 @@ export class Card {
 }
 
 /** Represents a standard 52-card deck. */
-export class Deck {
+export class Deck extends GameEntity {
   private _deck: Card[];
 
   get length(): number {
@@ -85,7 +86,9 @@ export class Deck {
   }
 
   /** Create a shuffled deck of cards */
-  constructor(private _logger?: GameLogger) {
+  constructor(logger?: GameLogger) {
+    super('Deck', logger);
+
     const deck: Card[] = [];
     for (let value = 2; value < 15; value++) {
       for (let suit = 0; suit < 4; suit++) {
@@ -100,7 +103,7 @@ export class Deck {
     }
 
     this._deck = deck;
-    this.log('New deck created!');
+    this.log('New deck was created!');
   }
 
   /** Deal the top card from the deck. */
@@ -108,7 +111,7 @@ export class Deck {
     const card = this._deck.pop();
     if (!card) {
       const errorMessage = 'Attempting to deal from an empty deck!';
-      this.log(errorMessage, LogType.GameError);
+      this.log(errorMessage, GameLogLevel.Error);
       throw new Error(errorMessage);
     }
     this.log(`${card.toString()} was dealt!`);
@@ -123,9 +126,5 @@ export class Deck {
           : (str += `\n${card.toString()}`),
       ''
     );
-  }
-
-  private log(message: string, logType?: LogType): void {
-    this._logger?.log('Deck', message, logType);
   }
 }
